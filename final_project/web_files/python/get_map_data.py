@@ -9,7 +9,7 @@ import scipy.stats
 import pickle
 import pymysql
 
-# CGI
+# CGI setup
 fs = cgi.FieldStorage()
 
 # Get age and income ranges from client
@@ -20,6 +20,15 @@ income_low = int(fs.getlist(fs.keys()[1])[0])
 
 income_range = [income_high, income_low]
 
+# Connect to DB
+db = pymysql.connect(host="104.236.210.19",
+			user='root',
+			passwd='advark79', 
+			database='census_county_demos'
+			)
+
+# Get DB cursor
+cursor = db.cursor()
 
 # Get joint probability of a target age and income range for a geographic unit
 def get_joint_prob_age_inc(pop_counts, mu, sigma, total_pop, income_range, total_in_inc_range):
