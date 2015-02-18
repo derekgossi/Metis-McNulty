@@ -1,0 +1,39 @@
+#map { height: 500px; }
+
+#map_spinner {
+	width: 32px;
+	height: 32px;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	background-image: url('/ajax-loader.gif');
+}
+
+#sliders_container {
+	width: 500px;
+	height: 300px;
+}
+
+#map_canvas {
+}
+
+/*D3 example*/
+.counties {
+        fill: none;
+}
+
+.states {
+        fill: none;
+        stroke: #fff;
+        stroke-linejoin: round;
+}
+
+.q0-20 { fill:rgb(247,251,255); }
+.q1-20 { fill:rgb(222,235,247); }
+.q2-20 { fill:rgb(198,219,239); }
+.q3-20 { fill:rgb(158,202,225); }
+.q4-20 { fill:rgb(107,174,214); }
+.q5-20 { fill:rgb(66,146,198); }
+.q6-20 { fill:rgb(33,113,181); }
+.q7-20 { fill:rgb(8,81,156); }
+.q8-20 { fill:rgb(8,48,107); }
