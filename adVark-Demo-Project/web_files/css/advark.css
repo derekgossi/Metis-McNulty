@@ -1,20 +1,87 @@
+
+body {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 #map { height: 500px; }
 
 #map_spinner {
-	width: 32px;
-	height: 32px;
-	position: relative;
-	top: 50%;
-	left: 50%;
-	background-image: url('/ajax-loader.gif');
+	width: 16px;
+	height: 16px;
+	float:left;
+	margin-top: 7px;
+	margin-right: 5px;
+	background-image: url('/ajax-loader2.gif');
+}
+
+#header_container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 350px;
+	height: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50px;	
 }
 
 #sliders_container {
-	width: 500px;
-	height: 300px;
+	float: left;
+	width: 350px;
+	height: 100px;
+	margin-top: 15px;
+}
+
+.slider_extras {
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
+.d3-slider-handle {
+	background: linear-gradient(to bottom, #9B2020 0%, #7F1D1D 100%) !important;
+}
+
+#map_container_centered {
+	margin-top: 100px;
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#map_container {
+	float: left;
+}
+
+#map_legend_container {
+	float: left;
+	margin-bottom: 15px;
+}
+
+#map_legend {
+	width: 300px;
+}
+
+.scale_color {
+	width: 20px;
+	height: 20px;
+	float: left;
+	margin-left: 20px;
+	margin-right: 10px;
+}
+
+#min_scale_color {
+	background-color: #ffffff;
+	border: 1px solid #aaaaaa;
+}
+
+#max_scale_color {
+	background-color: #00a8e6;
+	border: 1px solid #aaaaaa;
 }
 
 #map_canvas {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }
 
 /*D3 example*/
@@ -24,16 +91,29 @@
 
 .states {
         fill: none;
-        stroke: #fff;
+        stroke: #A09090;
         stroke-linejoin: round;
 }
 
-.q0-20 { fill:rgb(247,251,255); }
-.q1-20 { fill:rgb(222,235,247); }
-.q2-20 { fill:rgb(198,219,239); }
-.q3-20 { fill:rgb(158,202,225); }
-.q4-20 { fill:rgb(107,174,214); }
-.q5-20 { fill:rgb(66,146,198); }
-.q6-20 { fill:rgb(33,113,181); }
-.q7-20 { fill:rgb(8,81,156); }
-.q8-20 { fill:rgb(8,48,107); }
+
+
+.q19-20 { fill: #00a8e6; }
+.q18-20 { fill: #0dace7; }
+.q17-20 { fill: #1ab1e8; }
+.q16-20 { fill: #28b5e9; }
+.q15-20 { fill: #35baeb; }
+.q14-20 { fill: #43beec; }
+.q13-20 { fill: #50c3ed; }
+.q12-20 { fill: #5dc8ef; }
+.q11-20 { fill: #6bccf0; }
+.q10-20 { fill: #78d1f1; }
+.q9-20 { fill: #86d5f3; }
+.q8-20 { fill: #93daf4; }
+.q7-20 { fill: #a1def5; }
+.q6-20 { fill: #aee3f7; }
+.q5-20 { fill: #bbe8f8; }
+.q4-20 { fill: #c9ecf9; }
+.q3-20 { fill: #d6f1fb; }
+.q2-20 { fill: #e4f5fc; }
+.q1-20 { fill: #f1fafd; }
+.q0-20 { fill: #ffffff; }

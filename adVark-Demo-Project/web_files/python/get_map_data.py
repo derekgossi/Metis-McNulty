@@ -15,15 +15,10 @@ import censusDemos
 fs = cgi.FieldStorage()
 
 # Get age and income ranges from client
-# age_high = int(fs.getlist(fs.keys()[0])[1])
-# age_low = int(fs.getlist(fs.keys()[0])[0])
-# income_high = int(fs.getlist(fs.keys()[1])[1])
-# income_low = int(fs.getlist(fs.keys()[1])[0])
-
-age_high = 85
-age_low = 25
-income_high = 35000
-income_low = 15000
+age_high = int(fs.getlist(fs.keys()[0])[1])
+age_low = int(fs.getlist(fs.keys()[0])[0])
+income_high = int(fs.getlist(fs.keys()[1])[1]) * 1000
+income_low = int(fs.getlist(fs.keys()[1])[0]) * 1000
 
 # Get joint probability of a target age and income range for a geographic unit
 def get_joint_prob_age_inc(pop_counts, mu, sigma, total_pop, income_range, total_in_inc_range):
@@ -71,6 +66,8 @@ num_inc_bins = len(incomes_df[0:1].columns)
 
 # Iterate through counties and calculate joint probability for each
 return_df = {}
+max_val = 0
+
 for i in range(0, (num_counties - 1)):
 	# Get county id
 	county_id = int(ages_df[i:(i+1)].index.item())
@@ -80,18 +77,28 @@ for i in range(0, (num_counties - 1)):
 	mu = [ ages_df[i:(i+1)].ix[:,num_age_bins + bin_index][0] for bin_index in range(0, num_age_bins) ]
 	sigma = [ ages_df[i:(i+1)].ix[:,(num_age_bins*2) + bin_index][0] for bin_index in range(0, num_age_bins) ]
 	total_pop = int(total_pop_df[i:(i+1)][0])
-	income_range = [0, 50000]
+	income_range = [income_low, income_high]
 	total_in_inc_range = sum([ incomes_df[i:(i+1)].ix[:,bin_index][0] for bin_index in range(0, num_inc_bins) ])
 
 	# Calculate joint probability
 	joint_prob = get_joint_prob_age_inc(pop_counts, mu, sigma, total_pop, income_range, total_in_inc_range)
 	return_df[county_id] = joint_prob
 
+	# Update max value for scaling
+	if joint_prob > max_val:
+		max_val = joint_prob
+
+# Rescale return dataframe
+return_df_scaled = {}
+for county, prob in return_df.items():
+	new_prob = float(prob) / max_val
+	return_df_scaled[county] = new_prob
+
 # Print to TSV file
 with open('../csv/mapping_data_live.tsv', mode='wb') as csv_file:
 	w = csv.writer(csv_file, delimiter='\t')
     	w.writerow(['id', 'rate'])
-    	for id_df, rate_df in return_df.items():
+    	for id_df, rate_df in return_df_scaled.items():
     		w.writerow([id_df, rate_df])
 
 
@@ -100,7 +107,7 @@ with open('../csv/mapping_data_live.tsv', mode='wb') as csv_file:
 # Print return value
 print "Content-Type: application/text"
 print "\n"
-print "success"
+print max_val
 
 
 

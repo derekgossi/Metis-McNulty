@@ -14,19 +14,23 @@ $(document).ready(function() {
          $('#map_spinner').hide();
 
         // Ajax call to get joint distributions
-        $('#test_button').click(function() {
+        $('#new_map_button').click(function() {
+                var age_low = $( "#age_slider" ).slider( "values", 0 );
+                var age_high = $( "#age_slider" ).slider( "values", 1 );
+                var income_low = $( "#income_slider" ).slider( "values", 0 );
+                var income_high = $( "#income_slider" ).slider( "values", 1 );
+
                 $.ajax({
                         type: "post",
                         datatype:"text",
-                        async: false,
+                        async: true,
                         url: "python/get_map_data.py",
-                        data: { 'age_range' : [20,32], 'income_range' : [65000, 95000] },
+                        data: { 'age_range' : [age_low,age_high], 'income_range' : [income_low, income_high] },
                         beforeSend: function( data ) {
                                 showMapSpinner();
-                                alert("why");
+                                $('#new_map_button').text("Loading new data...").append("<div id=\"map_spinner\"></div>");
                         },
                         success: function( data ) {
-                                alert(data);
                                 $("#map_canvas").empty()
 
                                 queue()
@@ -35,6 +39,10 @@ $(document).ready(function() {
                                         .await(ready);
 
                                 hideMapSpinner();
+
+                                $('#new_map_button').text("Refresh");
+                                var percent_data = parseFloat(data) * 100;
+                                $('#max_scale_text').text(percent_data.toFixed(1) + "%");
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                                 alert(textStatus);
@@ -43,36 +51,47 @@ $(document).ready(function() {
                 }); 
         });
         
-        // D3 sliders
-        d3.select("body")
-                .select("#age_slider")
-                .call(d3.slider()
-                .axis(true)
-                .min(15)
-                .max(85)
-                .step(5));
+        $(function() {
+                $( "#age_slider" ).slider({
+                        range: true,
+                        min: 15,
+                        max: 85,
+                        values: [ 25, 35 ],
+                        slide: function( event, ui ) {
+                                $( "#age_amount" ).val( "" + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+                        }
+                });
 
-        d3.select("body")
-                .select("#income_slider")
-                .call(d3.slider()
-                .axis(true)
-                .min(0)
-                .max(200000)
-                .step(5));
+                $( "#income_slider" ).slider({
+                        range: true,
+                        min: 0,
+                        max: 200,
+                        values: [ 0, 50 ],
+                        slide: function( event, ui ) {
+                                $( "#income_amount" ).val( "" + ui.values[ 0 ] + "k - " + ui.values[ 1 ] + "k" );
+                        }
+                });
+
+                $( "#age_amount" ).val( "" + $( "#age_slider" ).slider( "values", 0 ) +
+                        " - " + $( "#age_slider" ).slider( "values", 1 ) );
+
+                $( "#income_amount" ).val( "" + $( "#income_slider" ).slider( "values", 0 ) +
+                        "k - " + $( "#income_slider" ).slider( "values", 1 ) + "k" );
+        });
 
 
 
         // D3 mapping
-        var width = 960, height = 600;
+        var width = 700, height = 500;
 
         var rateById = d3.map();
 
         var quantize = d3.scale.quantize()
-                .domain([0, .2])
-                .range(d3.range(9).map(function(i) { return "q" + i + "-20"; }));
+                .domain([0, 1])
+                .range(d3.range(20).map(function(i) { return "q" + i + "-20"; }));
 
         var projection = d3.geo.albersUsa()
-                .scale(1280)
+                .scale(900)
                 .translate([width / 2, height / 2]);
 
         var path = d3.geo.path()
