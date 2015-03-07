@@ -26,6 +26,5 @@ for table in tables:
 		print row
 
 
-# CHALLENGE # 2
 
 

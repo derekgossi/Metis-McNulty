@@ -44,12 +44,4 @@ classifiers = [tree_classifier]
 classifier_names = ['tree']
 
 
-### FIT AND PLOT CLASSIFIERS
-
-tree_classifier.fit(train_vd_x, train_vd_y)
-y_pred = tree_classifier.predict(test_vd_x)
-
-import pydot
-
-
 
