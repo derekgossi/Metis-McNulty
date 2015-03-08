@@ -2,12 +2,15 @@
 ### BUILD CLASSIFIER TO PREDICT INDIVIDUAL INCOME
 
 import pymysql
+import credentials
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelBinarizer
 
 # Connect to Advark DB
-db = pymysql.connect(host="104.236.210.19",user='root',passwd='advark79', database='advark')
+db = pymysql.connect(credentials.host,credentials.user,
+			credentials.passwd
+			credentials.database)
 cursor = db.cursor()
 
 # Read data from SQL
@@ -28,6 +31,7 @@ for num, feature_list in enumerate(lb_bin):
     df = pd.concat([df, new_df], axis=1)
 
 ## Train classifiers
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn import cross_validation
